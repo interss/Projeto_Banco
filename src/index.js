@@ -1,58 +1,62 @@
-/**
- * Função para validar o número de um cartão de crédito e identificar sua bandeira.
- * @param {string} numero - O número do cartão de crédito.
- * @returns {Object} Um objeto contendo a validade do cartão e a bandeira identificada.
- */
-function validarCartaoCredito(numero) {
-    // Lista de bandeiras de cartão de crédito e seus respectivos padrões regex
-    const bandeiras = [
-        { nome: 'Visa', regex: /^4[0-9]{12}(?:[0-9]{3})?$/ },
-        { nome: 'MasterCard', regex: /^5[1-5][0-9]{14}$/ },
-        { nome: 'American Express', regex: /^3[47][0-9]{13}$/ },
-        { nome: 'Diners Club', regex: /^3(?:0[0-5]|[68][0-9])[0-9]{11}$/ },
-        { nome: 'Discover', regex: /^6(?:011|5[0-9]{2})[0-9]{12}$/ },
-        { nome: 'JCB', regex: /^(?:2131|1800|35\d{3})\d{11}$/ },
-        { nome: 'Elo', regex: /^((636368)|(438935)|(504175)|(451416)|(636297)|(5067)|(4576)|(4011))\d+$/ },
-        { nome: 'Hipercard', regex: /^(606282\d{10}(\d{3})?)|(3841\d{15})$/ },
-        { nome: 'EnRoute', regex: /^(2014|2149)\d{11}$/ },
-        { nome: 'Voyager', regex: /^8699[0-9]{11}$/ },
-        { nome: 'Aura', regex: /^50[0-9]{14,17}$/ }
-    ];
+# 💳 Credit Card Validation and Brand Identification / Validação de Cartão de Crédito e Identificação de Bandeira
 
-    let sum = 0;
-    let shouldDouble = false;
+---
 
-    // Loop através dos dígitos do cartão de crédito
-    for (let i = numero.length - 1; i >= 0; i--) {
-        let digit = parseInt(numero.charAt(i));
+## 📋 Description / Descrição
 
-        // Dobra o valor de cada segundo dígito
-        if (shouldDouble) {
-            digit *= 2;
-            if (digit > 9) {
-                digit -= 9;
-            }
-        }
+This JavaScript function validates a credit card number using the Luhn algorithm and identifies its brand based on predefined patterns.  
+    
+Esta função JavaScript valida um número de cartão de crédito usando o algoritmo de Luhn e identifica sua bandeira com base em padrões predefinidos.  
 
-        sum += digit;
-        shouldDouble = !shouldDouble;
-    }
+---
 
-    // Verifica se a soma é divisível por 10
-    const valido = (sum % 10) === 0;
+## 🛠️ Function Details / Detalhes da Função
 
-    // Identifica a bandeira do cartão
-    let bandeira = 'Desconhecida';
-    for (const b of bandeiras) {
-        if (b.regex.test(numero)) {
-            bandeira = b.nome;
-            break;
-        }
-    }
+### Function: `validarCartaoCredito(numero)`
+    
+- **Purpose**: Validates a credit card number and identifies its brand.  
+  **Propósito**: Valida um número de cartão de crédito e identifica sua bandeira.  
+- **Parameters**:  
+  - `numero` (string): The credit card number to validate.  
+    O número do cartão de crédito a ser validado.  
+- **Returns**: An object containing:  
+  **Retorna**: Um objeto contendo:  
+  - `valido` (boolean): Whether the card number is valid.  
+    Se o número do cartão é válido.  
+  - `bandeira` (string): The identified card brand.  
+    A bandeira do cartão identificada.  
 
-    return { valido, bandeira };
-}
+---
 
-// Exemplo de uso
+## 🧐 How It Works / Como Funciona
+
+### Step 1: Define Card Brand Patterns / Passo 1: Definir Padrões das Bandeiras
+    
+- The function uses an array of objects (`bandeiras`) containing regex patterns for each card brand.  
+  A função usa um array de objetos (`bandeiras`) contendo padrões regex para cada bandeira de cartão.  
+
+### Step 2: Validate the Card Number / Passo 2: Validar o Número do Cartão
+    
+- The Luhn algorithm is applied to check the validity of the card number:  
+  O algoritmo de Luhn é aplicado para verificar a validade do número do cartão:  
+  1. Double every second digit from the right.  
+     Dobra o valor de cada segundo dígito a partir da direita.  
+  2. Subtract 9 from numbers greater than 9.  
+     Subtrai 9 de números maiores que 9.  
+  3. Sum all digits.  
+     Soma todos os dígitos.  
+  4. Check if the sum is divisible by 10.  
+     Verifica se a soma é divisível por 10.  
+
+### Step 3: Identify the Card Brand / Passo 3: Identificar a Bandeira do Cartão
+    
+- The function iterates through the `bandeiras` array and tests the card number against each regex pattern.  
+  A função itera pelo array `bandeiras` e testa o número do cartão em cada padrão regex.  
+
+---
+
+## 🚀 Example Usage / Exemplo de Uso
+
+```javascript
 const resultado = validarCartaoCredito('4556885812969644');
 console.log(`Cartão válido: ${resultado.valido}, Bandeira: ${resultado.bandeira}`);
